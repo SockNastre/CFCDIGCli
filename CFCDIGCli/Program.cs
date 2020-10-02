@@ -11,7 +11,7 @@ namespace CFCDIGCli
         {
             switch (args.Count())
             {
-                case 0:
+                case 0: // Automatically packs CFC.DIG from "data" folder using "filelist.txt"
                     {
                         args = new string[7] { "-p", "-i", "data", "-o", "CFC.DIG", "-l", "filelist.txt" };
                         break;
@@ -19,11 +19,11 @@ namespace CFCDIGCli
 
                 case 1:
                     {
-                        if (File.Exists(args[0]))
+                        if (File.Exists(args[0])) // Automatically unpacks CFC.DIG
                         {
                             args = new string[5] { "-u", "-i", args[0], "-o", $"{args[0]}_output" };
                         }
-                        else if (Directory.Exists(args[0]))
+                        else if (Directory.Exists(args[0])) // Automatically packs folder
                         {
                             args = new string[7] { "-p", "-i", args[0], "-o", $"{Path.GetDirectoryName(args[0])}\\CFC.DIG", "-l", $"{Path.GetDirectoryName(args[0])}\\filelist.txt" };
                         }
@@ -174,6 +174,7 @@ namespace CFCDIGCli
 
             Console.WriteLine("\nCFCDIGCli\nCopyright (c) 2020  SockNastre\nVersion: 1.0.0.0\n\n" +
                 "Racjin (de)compression\nLink: https://github.com/Raw-man/Racjin-de-compression \nLicense (GPL-3.0): https://github.com/Raw-man/Racjin-de-compression/blob/master/LICENSE \n\n" +
+                "Natural String Comparer\nLink: https://stackoverflow.com/a/248613/10216412 \nLicense (CC BY-SA 2.5): https://creativecommons.org/licenses/by-sa/2.5/ \n\n" + 
                 new string('-', 50) + "\n\nUsage: CFCDIGCli.exe <Command> <Options>\n\nCommands:\n-help (h)\n-unpack (-u)\n-pack (-p)\n\n" +
                 "Unpack Options:\n-input (-i)\n-output (-o)\n-nodecompression (-ndec)\n\n" +
                 "Pack Options:\n-input (-i)\n-output (-o)\n-filelist (-l)\n\n" +

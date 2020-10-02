@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace CFCDIGCli.CFCDIGUtilities
 {
+	/// <summary>
+	/// Provides static classes for compression with files with/for CFC.DIG .
+	/// </summary>
 	public static class Compression
 	{
 		/// <summary>

@@ -6,8 +6,17 @@ using System.Linq;
 
 namespace CFCDIGCli.CFCDIGUtilities
 {
+    /// <summary>
+    /// Provides static classes for unpacking/writing CFC.DIG archives.
+    /// </summary>
     public static class CFCDIG
     {
+        /// <summary>
+        /// Unpacks CFC.DIG archive.
+        /// </summary>
+        /// <param name="inputPath">Path of CFC.DIG archive.</param>
+        /// <param name="outputDirectory">Directory to extract archive contents.</param>
+        /// <param name="useDecompression">Decompress compressed files in CFC.DIG or not.</param>
         public static void Unpack(string inputPath, string outputDirectory, bool useDecompression = true)
         {
             using (var reader = new BinaryReader(File.Open(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
@@ -56,6 +65,12 @@ namespace CFCDIGCli.CFCDIGUtilities
             }
         }
 
+        /// <summary>
+        /// Writes CFC.DIG archive.
+        /// </summary>
+        /// <param name="inputDirectory">Directory to pack files in.</param>
+        /// <param name="outputPath">Path to save CFC.DIG once packed.</param>
+        /// <param name="filePathArray">Custom file paths in order of pack order.</param>
         public static void Write(string inputDirectory, string outputPath, string[] filePathArray = null)
         {
             if (filePathArray == null)

@@ -5,6 +5,12 @@ using System.Security;
 
 namespace CFCDIGCli.Classes
 {
+    /*
+     * All code in this class file licensed under CC BY-SA 2.5: https://creativecommons.org/licenses/by-sa/2.5/
+     * Code Link: https://stackoverflow.com/a/248613/10216412
+     * Written By: Greg Beech
+     */
+
     [SuppressUnmanagedCodeSecurity]
     internal static class SafeNativeMethods
     {

@@ -2,6 +2,9 @@
 
 namespace CFCDIGCli.CFCDIGUtilities
 {
+    /// <summary>
+    /// Provides fields, properties, constructor, and method to aid in reading a .raw archive.
+    /// </summary>
     public class RawArchive
     {
         private uint offset;
@@ -25,6 +28,11 @@ namespace CFCDIGCli.CFCDIGUtilities
             this.UnpackedSize = reader.ReadUInt32();
         }
 
+        /// <summary>
+        /// Gets file (aka section) count of .raw archive.
+        /// </summary>
+        /// <param name="path">Path of .raw archive.</param>
+        /// <returns>Amount of sections, returns 0xFFFF if invalid.</returns>
         public static ushort GetFileCount(string path)
         {
             using (var reader = new BinaryReader(File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read)))
