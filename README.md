@@ -9,13 +9,13 @@ Requires .NET Framework 4.8
 
 ### F.A.Q
 
-Q: _Why does opening the tool with no arguments give me an error?_
+Q: _Why does opening the tool with no arguments give me an error?_  
 A: This is because when the tool is opened with no arguments it searches for a "data" folder and (optionally) a "filelist.txt" to auto-pack; this is a feature for ease-of-access. If you are looking to see the help page then use the "-h" command.
 
-Q: _How do I use a "filelist"? What does that even mean?_
+Q: _How do I use a "filelist"? What does that even mean?_  
 A: Read DOCUMENTATION for details about that.
 
-Q: _How can I get in direct contact with anyone related to this tool?_
+Q: _How can I get in direct contact with anyone related to this tool?_  
 A: You can join the [Naruto Classic's Discord](https://discord.gg/jhKmg97), where we usually discuss all of this stuff.
 
 ### Credits
