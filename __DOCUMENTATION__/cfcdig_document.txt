@@ -1,0 +1,40 @@
+#
+# CFC.DIG ARCHIVE FORMAT | VERSION ?
+# BY: SOCKNASTRE
+#
+# Associated Documents: cfcdig_struct.cs
+#
+# All information in this document (plus associated documents above) is 
+# free to use as you wish, excluding external links/resources.
+#
+
+NOTE: This documentation is based on the CFC.DIG Archive, other variations may
+differ. Also make sure to follow reading this along with cfcdig_structs.cs. :D
+
+CFC.DIG Structure:
+	1. Header
+
+16 blank bytes, whether or not this can be considered a header is debatable, but
+these can be considered magic bytes or an identifier although that probably isn't their
+intended meaning.
+
+	2. File Records
+
+For every file being packed there is an FileRecord struct here. In every CFC.DIG the
+"offset" field is divided by 0x800. This is because all files and the header + file
+records are padded to 0x800 as well.
+
+	3. Data
+
+File data, all data here is stored in the same order as the file records but this doesn't
+technically have to be true given the FileRecord struct. Data is sometimes compressed, usually,
+a file isn't compressed if the first 4 bytes are null.
+
+Compression:
+
+For info about compression check out here: https://github.com/Raw-man/Racjin-de-compression
+It contains original C++ (de)compression code. The code for (de)compression provided by this
+tool is from the above repo just converted to C#.
+
+NOTE: The compression function is currently broken in my code. So I recommend for learning
+the compression to follow along with the C++ code.

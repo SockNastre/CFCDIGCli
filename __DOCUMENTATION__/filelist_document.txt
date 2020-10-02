@@ -1,0 +1,44 @@
+#
+# Associated Documents: filelist_ex.txt
+#
+# All information in this document (plus associated documents above) is 
+# free to use as you wish.
+#
+
+these can be considered magic bytes or an identifier although that probably isn't their
+This document is about how the filelist.txt system works with CFCDIGCli. By default
+by tool doesn't need a filelist.txt but in cases where someone wants to organize
+unpacked CFC.DIG files by names or in directories filelist.txt can be used.
+
+As we we know from cfcdig_document.txt the CFC.DIG structure does not contain any file
+names and it is important for file order to be kept when unpacking and repacking (the
+game expects certain files in certain orders in CFC.DIG).
+
+Let's say when you unpack CFC.DIG you get three files:
+
+	1. 1_16_0.raw
+	2. 2_1_1.raw
+	3. 3_32_0.raw
+
+Everything before the first underscore is the number that that file appears as in
+the CFC.DIG, so, 1_16_0.raw is the first file in the CFC.DIG, 2_1_1.raw is the second,
+etc.
+
+Let's say we figure out the names of these files or we make our own:
+
+	1. 1_16_0.raw -> MainMenuTexture.raw
+	2. 2_1_1.raw -> Audio.raw
+	3. 3_32_0.raw -> Loc.raw
+
+Since my tool relies on Windows alphabetical order, how do we get these files packed
+right in my tool? Simple, make a text file called "filelist.txt" and inside of it
+put the new names you found/created in order of their original names. See
+"filelist_ex.txt" for an example.
+
+Now, when using my tool and packing add the "-l" option followed by your filelist text
+file location: "CFCDIGCli.exe -p -i "input_folder" -o "CFC.DIG" -l "filelist.txt"
+
+Now when my tool packs the CFC.DIG it will read the filelist and pack in that order
+while checking "input_folder" for those files.
+
+NOTE: Make sure you actually rename the .raw to match the new names you gave them.
