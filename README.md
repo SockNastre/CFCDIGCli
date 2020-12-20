@@ -6,7 +6,7 @@ Requires .NET Framework 4.8
   - Drag & drop CFC.DIG archive to unpack, or, folder to pack into executable. Making it easier to work with.
   - Allows for modification of files inside of CFC.DIG for various PS2/PSP games.
   - Tool can read from a "filelist" allowing custom paths to be correctly packed in order.
-  - Provides working compression and decompression algorithm which can be easily implemented in other tools/systems.
+  - Provides working compression and decompression algorithm which can be easily implemented in other tools/systems in C#.
 
 ### F.A.Q
 
