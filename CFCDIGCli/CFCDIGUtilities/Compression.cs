@@ -9,12 +9,14 @@ namespace CFCDIGCli.CFCDIGUtilities
 	public static class Compression
 	{
 		/// <summary>
-		/// Original C++ code: <see href="https://github.com/Raw-man/Racjin-de-compression/blob/master/Racjin%20(de)compression/Decode.cpp">Racjin (de)compression</see>.
 		/// Decompresses file compressed with Racjin's LZSS-based compression.
+		/// 
+		/// <para>Original C++ code:
+		/// <see href="https://github.com/Raw-man/Racjin-de-compression/blob/master/Racjin%20(de)compression/Decode.cpp">Racjin (de)compression</see>.</para>
 		/// </summary>
 		/// <param name="buffer">Data to be decompressed.</param>
 		/// <param name="decompressedSize">Size of data before compression.</param>
-		/// <returns>Decompresseed data</returns>
+		/// <returns>Decompressed data</returns>
 		public static byte[] Decompress(byte[] buffer, uint decompressedSize)
 		{
 			uint lastDec = 0; // Last decoded byte of the previus decoding iteration
@@ -25,11 +27,11 @@ namespace CFCDIGCli.CFCDIGUtilities
 			var seqIndices = new uint[8192]; // References to previously decoded sequences
 			var decompressedBuffer = new byte[decompressedSize];
 
-			for (uint i = 0; i < buffer.Count(); i++)
+			for (uint index = 0; index < buffer.Count(); index++)
 			{
-				uint nextToken = buffer[i + 1]; // Next pair of bytes to decode from the input buffer
+				uint nextToken = buffer[index + 1]; // Next pair of bytes to decode from the input buffer
 				nextToken <<= 8;
-				nextToken |= buffer[i];
+				nextToken |= buffer[index];
 				nextToken >>= bitShift; // Unfold 9-bit token
 
 				/* 
@@ -47,7 +49,7 @@ namespace CFCDIGCli.CFCDIGUtilities
 				if (bitShift == 8)
 				{
 					bitShift = 0;
-					i++;
+					index++;
 				}
 
 				uint seqIndex = destIndex; // Start of a byte sequence
@@ -84,21 +86,15 @@ namespace CFCDIGCli.CFCDIGUtilities
 		}
 
 		/// <summary>
-		/// Original C++ code: <see href="https://github.com/Raw-man/Racjin-de-compression/blob/master/Racjin%20(de)compression/Encode.cpp">Racjin (de)compression</see>.
 		/// Compresses file with Racjin's LZSS-based compression.
 		/// 
-		/// <para><b>NOTE: FUNCTION CURRENTLY BROKEN FOR C#.</b></para>
+		/// <para>Original C++ code:
+		/// <see href="https://github.com/Raw-man/Racjin-de-compression/blob/master/Racjin%20(de)compression/Encode.cpp">Racjin (de)compression</see>.</para>
 		/// </summary>
 		/// <param name="buffer">Data to be compressed.</param>
 		/// <returns>Compressed data</returns>
 		public static byte[] Compress(byte[] buffer)
 		{
-			/*
-			 * As stated in the summary this code is currently broken most likely through an error
-			 * from manual conversion from C++ to C#. This will be looked into but is not a
-			 * priority for repacking CFC.DIG .
-			 */
-
 			uint lastEnc = 0; // Last encoded byte
 			byte bitShift = 0; // Shift by bitShift (used to fold tokens)
 
@@ -115,7 +111,8 @@ namespace CFCDIGCli.CFCDIGUtilities
 				Capacity = buffer.Count()
 			};
 
-			for (uint i = 0; i < buffer.Count(); i++)
+			uint index = 0;
+			while (index < buffer.Length)
 			{
 				byte bestFreq = 0;
 				byte bestMatch = 0;
@@ -124,7 +121,7 @@ namespace CFCDIGCli.CFCDIGUtilities
 				
 				To get the compression for Bomberman Kart DX do:
 				
-				if (frequencies[lastEncByte] >= 256)
+				if (frequencies[lastEncByte] == 256)
 				{
 					frequencies[lastEncByte] = 0x00;
 				}
@@ -132,18 +129,18 @@ namespace CFCDIGCli.CFCDIGUtilities
 				*/
 
 				var positionsToCheck = (byte)(frequencies[lastEnc] < 32 ? (frequencies[lastEnc] & 0x1F) : 32);
-				uint seqIndex = i;
+				uint seqIndex = index;
 
 				for (byte freq = 0; freq < positionsToCheck; freq++)
 				{
 					uint key1 = freq + lastEnc * 32; // 0x1F + 0xFF*32 = 8191
 					uint srcIndex = seqIndices[key1];
 					byte matched = 0;
-					var maxLength = (uint)(i + 8 < buffer.Count() ? 8 : buffer.Count() - i);
+					var maxLength = (uint)(index + 8 < buffer.Count() ? 8 : buffer.Count() - index);
 
 					for (byte offset = 0; offset < maxLength; offset++)
 					{
-						if (buffer[srcIndex + offset] == buffer[i + offset])
+						if (buffer[srcIndex + offset] == buffer[index + offset])
 						{
 							matched++;
 						}
@@ -165,12 +162,12 @@ namespace CFCDIGCli.CFCDIGUtilities
 				{
 					token |= (ushort)(bestFreq << 3); // f|ooooolll - f=0 (flag), o - occurrence/frequency, l -length
 					token |= (ushort)(bestMatch - 1); // Encode a reference
-					i += bestMatch;
+					index += bestMatch;
 				}
 				else // Encode byte literal
 				{
-					token = (ushort)(0x100 | buffer[i]); // f|bbbbbbbb - f=1
-					i++;
+					token = (ushort)(0x100 | buffer[index]); // f|bbbbbbbb - f=1
+					index++;
 				}
 
 				token <<= bitShift; // Prepare for folding
@@ -185,19 +182,19 @@ namespace CFCDIGCli.CFCDIGUtilities
 				uint key2 = (uint)((frequencies[lastEnc] & 0x1F) + lastEnc * 32); // 0x1F + 0xFF*32 = 8191
 				seqIndices[key2] = seqIndex;
 				frequencies[lastEnc] = (ushort)(frequencies[lastEnc] + 1);
-				lastEnc = buffer[i - 1];
+				lastEnc = buffer[index - 1];
 			}
 
 			// Fold tokens (8 tokens, 16 bytes -> 8 tokens, 9 bytes)
-			for (uint i = 0; i < tokens.Count; i += 8)
+			for (uint n = 0; n < tokens.Count; n += 8)
 			{
-				var groupSize = (ulong)(i + 8 < tokens.Count ? 8 : tokens.Count - i);
+				var groupSize = (ulong)(n + 8 < tokens.Count ? 8 : tokens.Count - n);
 
 				for (uint s = 0; s <= groupSize; s += 2)
 				{
-					var first = (ushort)(s > 0 ? tokens[(int)(s + i - 1)] : 0x00);
-					var middle = (ushort)(s < groupSize ? tokens[(int)(s + i)] : 0x00);
-					var last = (ushort)(s < groupSize - 1 ? tokens[(int)(s + i + 1)] : 0x00);
+					var first = (ushort)(s > 0 ? tokens[(int)(s + n - 1)] : 0x00);
+					var middle = (ushort)(s < groupSize ? tokens[(int)(s + n)] : 0x00);
+					var last = (ushort)(s < groupSize - 1 ? tokens[(int)(s + n + 1)] : 0x00);
 
 					var result = (ushort)(middle | (first >> 8) | (last << 8));
 					compressedBuffer.Add((byte)(result & 0xFF));

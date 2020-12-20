@@ -17,7 +17,7 @@ namespace CFCDIGCli.CFCDIGUtilities
         /// <param name="inputPath">Path of CFC.DIG archive.</param>
         /// <param name="outputDirectory">Directory to extract archive contents.</param>
         /// <param name="useDecompression">Decompress compressed files in CFC.DIG or not.</param>
-        public static void Unpack(string inputPath, string outputDirectory, bool useDecompression = true)
+        public static void Unpack(string inputPath, string outputDirectory, bool useDecompression = false)
         {
             using (var reader = new BinaryReader(File.Open(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read)))
             {
@@ -48,14 +48,14 @@ namespace CFCDIGCli.CFCDIGUtilities
                     reader.BaseStream.Position = archive.Offset;
                     byte[] data;
 
-                    if (archive.IsCompressed && useDecompression)
+                    /*if (archive.IsCompressed & useDecompression)
                     {
                         data = Compression.Decompress(reader.ReadBytes((int)archive.PackedSize), archive.UnpackedSize);
                     }
                     else
-                    {
+                    {*/
                         data = reader.ReadBytes((int)archive.PackedSize);
-                    }
+                    //}
 
                     File.WriteAllBytes($"{outputDirectory}\\{count}_{(archive.SectionCount == ushort.MaxValue ? "UNK" : archive.SectionCount.ToString())}_{(archive.IsCompressed ? '1' : '0')}.raw", data);
                     Console.Write($"\r{count} / {rawArchiveList.Count()}");
