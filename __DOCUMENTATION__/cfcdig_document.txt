@@ -35,6 +35,3 @@ Compression:
 For info about compression check out here: https://github.com/Raw-man/Racjin-de-compression
 It contains original C++ (de)compression code. The code for (de)compression provided by this
 tool is from the above repo just converted to C#.
-
-NOTE: The compression function is currently broken in my code. So I recommend for learning
-the compression to follow along with the C++ code.
