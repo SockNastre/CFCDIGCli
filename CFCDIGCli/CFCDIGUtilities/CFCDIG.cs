@@ -46,16 +46,9 @@ namespace CFCDIGCli.CFCDIGUtilities
                 {
                     count++;
                     reader.BaseStream.Position = archive.Offset;
-                    byte[] data;
-
-                    /*if (archive.IsCompressed & useDecompression)
-                    {
-                        data = Compression.Decompress(reader.ReadBytes((int)archive.PackedSize), archive.UnpackedSize);
-                    }
-                    else
-                    {*/
-                        data = reader.ReadBytes((int)archive.PackedSize);
-                    //}
+                    byte[] data = (archive.IsCompressed & useDecompression) ? 
+                        Compression.Decompress(reader.ReadBytes((int)archive.PackedSize), archive.UnpackedSize) 
+                        : reader.ReadBytes((int)archive.PackedSize);
 
                     File.WriteAllBytes($"{outputDirectory}\\{count}_{(archive.SectionCount == ushort.MaxValue ? "UNK" : archive.SectionCount.ToString())}_{(archive.IsCompressed ? '1' : '0')}.raw", data);
                     Console.Write($"\r{count} / {rawArchiveList.Count()}");
